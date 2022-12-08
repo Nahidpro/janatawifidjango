@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <title>Jatata Wifi Home | sql Model</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">Janata Wifi</h1>
+
+    <div>
+      <form method="POST" action="{% url 'sqlmodel' %}">
+        {% csrf_token %}
+        <div class="form-group mt-3 mb-3">
+          <label for="defData">Select Factor</label>
+          <select class="form-control" id="defData">
+            {% for trade_name in trade_code_name %}
+            <option value="{{trade_name}}">{{trade_name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <input type="submit" value="Search by Trade_code" />
+      </form>
+      <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+          type: 'line',
+
+          data: {
+            labels: [{% for data in stock_market_data %} '{{data.date}}' ,{% endfor %}],
+            datasets: [
+        {
+          label: 'close',
+          data: [{% for data in stock_market_data %}{{data.close|floatformat}} ,{% endfor %}],
+          borderColor: 'green',
+          backgroundColor: 'red',
+          order: 1
+        },
+        {
+          label: 'close',
+          data: [{% for data in stock_market_data %} {{data.close|floatformat}} ,{% endfor %}],
+
+          backgroundColor: 'blue',
+          order: 1,
+          type:'bar'
+        },
+      ]
+          },
+          options: {
+            scales: {
+              x: {
+                beginAtZero: true
+              }
+            }
+          }
+        }
+
+        );
+    </script>
+
+    <!--   
+   -->
+
+    <!-- [{
+    label: 'Stock Market',
+    data: [{% for i in stock_market_data %}{{i.close|floatformat}} ,{% endfor %}],
+    
+    
+    borderWidth: 1
+
+  }] -->
+
+    <h1 style="text-align: center" id="p2">Data In table</h1>
+
+    <!-- Button trigger modal -->
+
+    <button id="editbutton" class="btn btn-outline-primary">Edit</button>
+
+    <table class="table table-striped">
+      <!-- Modal -->
+
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Edit information
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="date" class="form-label"
+                    >Date</label
+                  >
+                  <input
+                    value=""
+                    type="text" 
+                    name="date"
+                    class="form-control"
+                    id="date"
+                    aria-describedby="emailHelp"
+                  />
+                  
+                </div>
+
+
+
+
+                <div class="mb-3">
+                  <label for="trade_code" class="form-label"
+                    >trade_code</label
+                  >
+                  <input
+                    value=""
+                    type="text"
+                    name="trade_code"
+                    class="form-control"
+                    id="trade_code"
+                    aria-describedby="emailHelp"
+                  />
+                  
+                </div>
+
+
+                <div class="mb-3">
+                  <label for="high" class="form-label"
+                    >high</label
+                  >
+                  <input
+                    value=""
+                    type="text"
+
+                    name="high"
+                    class="form-control"
+                    id="high"
+                    aria-describedby="emailHelp"
+                  />
+                  
+                </div>
+
+                 
+
+                <div class="mb-3">
+                  <label for="low" class="form-label"
+                    >low</label
+                  >
+                  <input
+                    value=""
+                    type="text"
+                    name="low"
+                    class="form-control"
+                    id="low"
+                    aria-describedby="emailHelp"
+                  />
+                  
+                </div>
+
+                <div class="mb-3">
+                  <label for="open" class="form-label"
+                    >open</label
+                  >
+                  <input
+                    value=""
+                    type="text"
+                    name="open"
+                    class="form-control"
+                    id="open"
+                    aria-describedby="emailHelp"
+                  />
+                  
+                </div>
+
+
+                <div class="mb-3">
+                  <label for="close" class="form-label"
+                    >close</label
+                  >
+                  <input
+                    value=""
+                    type="text"
+                    name="close"
+                    class="form-control"
+                    id="close"
+                    aria-describedby="emailHelp"
+                  />
+                  
+                </div>
+
+
+                
+
+
+
+                
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+          </div>
+        </div>
+      </div>
+
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Trade_code</th>
+          <th scope="col">High</th>
+          <th scope="col">Low</th>
+          <th scope="col">Open</th>
+          <th scope="col">Close</th>
+          <th scope="col">Volume</th>
+          <th scope="col">Edit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for stock_data in stock_market_data %}
+        <tr>
+          <td>{{stock_data.date}}</td>
+          <td>{{stock_data.trade_code}}</td>
+          <td>{{stock_data.high}}</td>
+          <td>{{stock_data.low}}</td>
+          <td>{{stock_data.open}}</td>
+          <td>{{stock_data.close}}</td>
+          <td>{{stock_data.volume}}</td>
+          <td>
+            <button
+              id="editbutton"
+              onclick="abf('{{stock_data.date}}', 
+              '{{stock_data.trade_code}}' , 
+              '{{stock_data.high}}', 
+              '{{stock_data.low}}',
+              '{{stock_data.open}}', 
+              '{{stock_data.close}}',
+              
+
+              
+
+              )"
+              class="btn btn-outline-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Edit
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../static/script.js"></script>
+  </body>
+</html>

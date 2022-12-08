@@ -18,5 +18,7 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('showjsondata.urls'),name="home"),
+
+    path('', include('janatawifi_sqldata.urls'),name="home"),
+    path('jsondata/', include('showjsondata.urls'),name="jsondata"),
 ]
